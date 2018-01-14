@@ -1,0 +1,10 @@
+---
+Name: sasscompiler
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\View\Requirements_Backend:
+    class: Axllent\Scss\ScssCompiler
+
+SilverStripe\Admin\LeftAndMain:
+  extensions:
+    - Axllent\Scss\Extensions\HTMLEditor

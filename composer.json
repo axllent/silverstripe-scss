@@ -1,0 +1,29 @@
+{
+	"name": "axllent/silverstripe-scss",
+	"description": "A wrapper for scssphp to integrate scss compiling directly into SilverStripe",
+	"type": "silverstripe-vendormodule",
+	"homepage": "https://github.com/axllent/silverstripe-scss",
+	"keywords": ["silverstripe", "scss", "css", "scssphp", "sass"],
+	"license": "The MIT License (MIT)",
+	"authors": [
+		{
+			"name": "Ralph Slooten",
+			"homepage": "http://www.axllent.org/"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/axllent/silverstripe-scss/issues"
+	},
+    "require": {
+		"silverstripe/framework": "^4.0",
+        "leafo/scssphp": "^0.7.4"
+	},
+    "conflict": {
+        "axllent/silverstripe-less": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Axllent\\Scss\\": "src/"
+        }
+    }
+}
