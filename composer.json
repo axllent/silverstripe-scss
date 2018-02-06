@@ -4,7 +4,7 @@
 	"type": "silverstripe-vendormodule",
 	"homepage": "https://github.com/axllent/silverstripe-scss",
 	"keywords": ["silverstripe", "scss", "css", "scssphp", "sass"],
-	"license": "The MIT License (MIT)",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Ralph Slooten",
