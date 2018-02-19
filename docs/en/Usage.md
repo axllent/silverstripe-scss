@@ -15,7 +15,7 @@ class PageController extends ContentController
     public function init()
     {
         parent::init();
-        Requirements:css('themes/site/css/stylesheet.scss');
+        Requirements::css('themes/site/css/stylesheet.scss');
     }
 }
 ```
