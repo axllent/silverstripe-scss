@@ -7,7 +7,7 @@ Scss files are only compiled when needed, or when a `?flush` is done.
 ## Features
 
 - Integrates [scssphp](http://leafo.github.io/scssphp/) seemessly into SilverStripe
-- Includes flushing option (`?flush`) to regenerate CSS stylesheets (ie. force undetected scss changes with @import)
+- Includes flushing option (`?flushstyles`) to regenerate CSS stylesheets (ie. force undetected scss changes with @import). Note: this only applies to sites in `dev` mode. Alternatively use `?flush` to flush everything including stylesheets.
 - Writes processed `*.scss` files into `assets/_combinedfiles` and automatically modifies `Requirements` paths
 - Allows custom global variables to be passed through to scss compiling (yaml configuration)
 - Basic support for `$ThemeDir` (eg: `url('#{$ThemeDir}/images/logo.png')` (see [Configuration](docs/en/Configuration.md))

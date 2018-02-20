@@ -127,7 +127,10 @@ class ScssCompiler extends Requirements_Backend
         if (
             is_null($output_file) ||
             $this->is_dev &&
-            filemtime(Director::makeRelative($output_file)) < filemtime(Director::getAbsFile($scss_file))
+            (
+                filemtime(Director::makeRelative($output_file)) < filemtime(Director::getAbsFile($scss_file)) ||
+                isset($_GET['flushstyles'])
+            )
         ) {
             $current_raw_css = $this->asset_handler->getContent($css_file);
 
