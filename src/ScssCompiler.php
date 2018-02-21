@@ -132,8 +132,6 @@ class ScssCompiler extends Requirements_Backend
                 isset($_GET['flushstyles'])
             )
         ) {
-            $current_raw_css = $this->asset_handler->getContent($css_file);
-
             $base_url = Director::baseURL();
 
             $scss_base = dirname($base_url . $scss_file) . '/';
