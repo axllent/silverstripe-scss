@@ -145,13 +145,13 @@ class ScssCompiler extends Requirements_Backend
                 $scss->setFormatter('Leafo\ScssPhp\Formatter\Crunched');
             }
 
-            $scss->addImportPath(dirname(Director::getAbsFile($scss_file)) .'/');
+            $scss->addImportPath(dirname(Director::getAbsFile($scss_file)) . '/');
 
             $variables = $this->config->get(__CLASS__, 'variables');
 
             $variables['BaseURL'] = '"' . $base_url . '"';
 
-            $theme_dir = rtrim($this->config->get(__CLASS__, 'theme_dir'), '/'). '/';
+            $theme_dir = rtrim($this->config->get(__CLASS__, 'theme_dir'), '/') . '/';
             if ($theme_dir) {
                 $variables['ThemeDir'] = '"' . $base_url . rtrim(ltrim($theme_dir, '/'), '/') . '"';
             }
@@ -159,22 +159,18 @@ class ScssCompiler extends Requirements_Backend
             $scss->setVariables($variables);
 
             $sourcemap = $this->config->get(__CLASS__, 'sourcemap');
-            $map_url = $css_file.".map";
             if ($sourcemap) {
                 $map_options = [
-                    "sourceMapRootpath" => Director::absoluteURL(dirname($scss_file))."/",
-                    "sourceMapBasepath" => dirname(Director::getAbsFile($scss_file)),
+                    'sourceMapRootpath' => $scss_base,
+                    'sourceMapBasepath' => dirname(Director::getAbsFile($scss_file)),
                 ];
 
-                if (strtolower($sourcemap) == "inline") {
+                if (strtolower($sourcemap) == 'inline') {
                     $scss->setSourceMap(Compiler::SOURCE_MAP_INLINE);
                     $scss->setSourceMapOptions($map_options);
                 } else
-                if ($sourcemap === true || strtolower($sourcemap) == "file") {
-                    // create a dummy file so we can get the finished path for the map compiler to write to
-                    $map_url = $css_file.".map";
-                    $this->asset_handler->setContent($map_url, "");
-                    $map_options["sourceMapWriteTo"] = $map_url;
+                if ($sourcemap === true || strtolower($sourcemap) == 'file') {
+                    $map_options['sourceMapWriteTo'] = $css_file . '.map';
                     $scss->setSourceMap(new SourceMapGenerator($map_options));
                 }
             }
