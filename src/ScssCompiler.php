@@ -2,6 +2,7 @@
 
 namespace Axllent\Scss;
 
+use Axllent\Scss\Extensions\SourceMapGenerator;
 use Leafo\ScssPhp\Compiler;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -144,18 +145,35 @@ class ScssCompiler extends Requirements_Backend
                 $scss->setFormatter('Leafo\ScssPhp\Formatter\Crunched');
             }
 
-            $scss->addImportPath(dirname(Director::getAbsFile($scss_file)) .'/');
+            $scss->addImportPath(dirname(Director::getAbsFile($scss_file)) . '/');
 
             $variables = $this->config->get(__CLASS__, 'variables');
 
             $variables['BaseURL'] = '"' . $base_url . '"';
 
-            $theme_dir = rtrim($this->config->get(__CLASS__, 'theme_dir'), '/'). '/';
+            $theme_dir = rtrim($this->config->get(__CLASS__, 'theme_dir'), '/') . '/';
             if ($theme_dir) {
                 $variables['ThemeDir'] = '"' . $base_url . rtrim(ltrim($theme_dir, '/'), '/') . '"';
             }
 
             $scss->setVariables($variables);
+
+            $sourcemap = $this->config->get(__CLASS__, 'sourcemap');
+            if ($sourcemap) {
+                $map_options = [
+                    'sourceMapRootpath' => $scss_base,
+                    'sourceMapBasepath' => dirname(Director::getAbsFile($scss_file)),
+                ];
+
+                if (strtolower($sourcemap) == 'inline') {
+                    $scss->setSourceMap(Compiler::SOURCE_MAP_INLINE);
+                    $scss->setSourceMapOptions($map_options);
+                } else
+                if ($sourcemap === true || strtolower($sourcemap) == 'file') {
+                    $map_options['sourceMapWriteTo'] = $css_file . '.map';
+                    $scss->setSourceMap(new SourceMapGenerator($map_options));
+                }
+            }
 
             $raw_css = $scss->compile(
                 file_get_contents(Director::getAbsFile($scss_file))

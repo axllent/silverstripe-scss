@@ -4,6 +4,7 @@ Notable changes to this project will be documented in this file.
 
 ## [1.0.x]
 
+- Add optional source maps (inline or file)
 - Remove redundant code
 
 

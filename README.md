@@ -13,6 +13,7 @@ Scss files are only compiled when needed, or when a `?flush` is done.
 - Basic support for `$ThemeDir` (eg: `url('#{$ThemeDir}/images/logo.png')` (see [Configuration](docs/en/Configuration.md))
 - Automatic compression of CSS files when in `Live` mode (may require an initial `?flush`)
 - Adds any processed `editor.scss` files to TinyMCE (must be included in your front-end template)
+- Optional source maps (either inline or exported to a file)
 
 ## Requirements
 
