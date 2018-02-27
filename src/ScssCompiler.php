@@ -2,6 +2,7 @@
 
 namespace Axllent\Scss;
 
+use Axllent\Scss\Extensions\SourceMapGenerator;
 use Leafo\ScssPhp\Compiler;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
@@ -167,16 +168,15 @@ class ScssCompiler extends Requirements_Backend
 
                 if (strtolower($sourcemap) == "inline") {
                     $scss->setSourceMap(Compiler::SOURCE_MAP_INLINE);
+                    $scss->setSourceMapOptions($map_options);
                 } else
                 if ($sourcemap === true || strtolower($sourcemap) == "file") {
                     // create a dummy file so we can get the finished path for the map compiler to write to
                     $map_url = $css_file.".map";
                     $this->asset_handler->setContent($map_url, "");
-                    $map_options["sourceMapWriteTo"] = Director::getAbsFile(ltrim($this->asset_handler->getContentURL($map_url), "/"));
-                    $map_options["sourceMapURL"] = Director::absoluteURL($this->asset_handler->getContentURL($map_url));
-                    $scss->setSourceMap(Compiler::SOURCE_MAP_FILE);
+                    $map_options["sourceMapWriteTo"] = $map_url;
+                    $scss->setSourceMap(new SourceMapGenerator($map_options));
                 }
-                $scss->setSourceMapOptions($map_options);
             }
 
             $raw_css = $scss->compile(
