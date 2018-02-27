@@ -52,3 +52,7 @@ You can also include scss stylesheets from within your templates:
 ## Using custom variables and `$ThemeDir`
 
 Please refer to [Configuration](Configuration.md) documentation.
+
+## Source maps
+
+Please refer to [Configuration](Configuration.md) documentation.

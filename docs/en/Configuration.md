@@ -24,7 +24,6 @@ In your `scss` file you would use it like:
 
 Only one `theme_dir` is supported.
 
-
 ## Custom variables
 
 You can set multiple variables in your YAML configuration file (eg: `mysite/_config/scss.yml`).
@@ -52,3 +51,27 @@ header h1 {
 
 The scss compiler will automatically add any pre-compiled `editor.scss` file (used on the front-end) to TinyMCE.
 This means your site must have an `editor.scss` in your `Requirements` if you want this to work.
+
+## Source maps
+
+Source maps are very helpful when building, debugging or maintaining a website. They let you use browser development tools (such as Chrome's inspector) to see the exact file and line where your SCSS selectors are declared.
+
+Available settings are:
+* `inline` (embedded in the compile stylesheet)
+* `file` (separate file in the same location as the compiled stylesheet)
+
+```
+Axllent\Scss\ScssCompiler:
+  sourcemap: 'file' # file | inline
+```
+
+If you wish to enable source maps to only your `dev` envronment, you can do so like this
+
+```---
+Name: dev-sourcemaps
+Only:
+  environment: dev
+---
+Axllent\Scss\ScssCompiler:
+  sourcemap: 'file'
+```
