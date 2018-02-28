@@ -169,7 +169,8 @@ class ScssCompiler extends Requirements_Backend
             }
 
             $raw_css = $scss->compile(
-                file_get_contents(Director::getAbsFile($scss_file))
+                file_get_contents(Director::getAbsFile($scss_file)),
+                $scss_file
             );
 
             $this->asset_handler->setContent($css_file, $raw_css);
