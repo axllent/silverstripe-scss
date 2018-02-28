@@ -57,18 +57,25 @@ This means your site must have an `editor.scss` in your `Requirements` if you wa
 Source maps are very helpful when building, debugging or maintaining a website. They let you use browser development tools (such as Chrome's inspector) to see the exact file and line where your SCSS selectors are declared.
 
 Available settings are:
-* `inline` (embedded in the compile stylesheet)
 * `file` (separate file in the same location as the compiled stylesheet)
+* `inline` (embedded in the compile stylesheet)
 
 ```
 Axllent\Scss\ScssCompiler:
-  sourcemap: 'file' # file | inline
+  sourcemap: file # file | inline
 ```
 
 If you wish to enable source maps to only your `dev` envronment, you can do so like this
 
-```---
-Name: dev-sourcemaps
+```
+---
+Name: scss
+---
+Axllent\Scss\ScssCompiler:
+  theme_dir: 'themes/site/'
+
+---
+Name: dev-scss
 Only:
   environment: dev
 ---
