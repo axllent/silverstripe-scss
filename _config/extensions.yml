@@ -8,3 +8,10 @@ SilverStripe\Core\Injector\Injector:
 SilverStripe\Admin\LeftAndMain:
   extensions:
     - Axllent\Scss\Extensions\HTMLEditor
+
+SilverStripe\Assets\File:
+  allowed_extensions:
+    - map
+  app_categories:
+    documents:
+      - map
