@@ -36,6 +36,8 @@ class ScssCompiler extends Requirements_Backend
 
     private static $theme_dir = false;
 
+    private static $sourcemap = 'file';
+
     private static $processed_files = [];
 
     public function __construct()
@@ -152,7 +154,7 @@ class ScssCompiler extends Requirements_Backend
             $scss->setVariables($variables);
 
             $sourcemap = $this->config->get(__CLASS__, 'sourcemap');
-            if ($sourcemap) {
+            if ($sourcemap && $this->is_dev && in_array(strtolower($sourcemap), ['inline', 'file'])) {
                 $map_options = [
                     'sourceMapRootpath' => $scss_base,
                     'sourceMapBasepath' => dirname(Director::getAbsFile($scss_file)),
@@ -161,15 +163,17 @@ class ScssCompiler extends Requirements_Backend
                 if (strtolower($sourcemap) == 'inline') {
                     $scss->setSourceMap(Compiler::SOURCE_MAP_INLINE);
                     $scss->setSourceMapOptions($map_options);
-                } elseif ($sourcemap === true || strtolower($sourcemap) == 'file') {
+                } elseif (strtolower($sourcemap) == 'file') {
                     $map_options['sourceMapWriteTo'] = $css_file . '.map';
                     $scss->setSourceMap(new SourceMapGenerator($map_options));
                 }
             }
 
+            $scss_filename = basename($scss_file);
+
             $raw_css = $scss->compile(
                 file_get_contents(Director::getAbsFile($scss_file)),
-                $scss_file
+                $scss_filename
             );
 
             $this->asset_handler->setContent($css_file, $raw_css);
