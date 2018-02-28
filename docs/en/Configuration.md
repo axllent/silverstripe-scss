@@ -31,6 +31,7 @@ You can set multiple variables in your YAML configuration file (eg: `mysite/_con
 ```
 Axllent\Scss\ScssCompiler:
   theme_dir: 'themes/site'
+  sourcemap: 'file'
   variables:
     'HeaderFont': 'Arial, sans-serif, "Times New Roman"'
     'HeaderFontSize': '18px'
@@ -54,31 +55,14 @@ This means your site must have an `editor.scss` in your `Requirements` if you wa
 
 ## Source maps
 
-Source maps are very helpful when building, debugging or maintaining a website. They let you use browser development tools (such as Chrome's inspector) to see the exact file and line where your SCSS selectors are declared.
+Source maps are very helpful when building, debugging or maintaining a website. They let you use browser development tools (such as Chrome's inspector) to see the exact file and line where your SCSS selectors are declared. By default sourcemap is enabled (file), and only in `dev` mode.
 
 Available settings are:
 * `file` (separate file in the same location as the compiled stylesheet)
 * `inline` (embedded in the compile stylesheet)
+* false (enabled by default)
 
 ```
 Axllent\Scss\ScssCompiler:
-  sourcemap: file # file | inline
-```
-
-If you wish to enable source maps to only your `dev` envronment, you can do so like this
-
-```
----
-Name: scss
----
-Axllent\Scss\ScssCompiler:
-  theme_dir: 'themes/site/'
-
----
-Name: dev-scss
-Only:
-  environment: dev
----
-Axllent\Scss\ScssCompiler:
-  sourcemap: 'file'
+  sourcemap: 'file' # 'file' | 'inline' | false
 ```
