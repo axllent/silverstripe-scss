@@ -29,12 +29,6 @@ use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 
 class ScssCompiler extends Requirements_Backend
 {
-
-    /**
-     * @config
-     */
-    private static $cache_method = 'serialize';
-
     /**
      * @config
      */
@@ -168,8 +162,7 @@ class ScssCompiler extends Requirements_Backend
                 if (strtolower($sourcemap) == 'inline') {
                     $scss->setSourceMap(Compiler::SOURCE_MAP_INLINE);
                     $scss->setSourceMapOptions($map_options);
-                } else
-                if ($sourcemap === true || strtolower($sourcemap) == 'file') {
+                } elseif ($sourcemap === true || strtolower($sourcemap) == 'file') {
                     $map_options['sourceMapWriteTo'] = $css_file . '.map';
                     $scss->setSourceMap(new SourceMapGenerator($map_options));
                 }
