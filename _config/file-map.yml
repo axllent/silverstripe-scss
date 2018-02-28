@@ -1,0 +1,6 @@
+SilverStripe\Assets\File:
+  allowed_extensions:
+    - map
+  app_categories:
+    documents:
+      - map
