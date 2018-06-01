@@ -17,7 +17,7 @@ Scss files are only compiled when needed, or when a `?flush` is done.
 
 ## Requirements
 
-- SilverStripe 4
+- SilverStripe ^4
 
 ## Installation
 
