@@ -5,7 +5,7 @@ Only:
 ---
 SilverStripe\Assets\File:
   allowed_extensions:
-    - map
+    - css.map
   app_categories:
     documents:
-      - map
+      - css.map
