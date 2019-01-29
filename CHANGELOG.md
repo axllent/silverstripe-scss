@@ -2,6 +2,11 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.2.0]
+
+- Do not combine requirements on ErrorPages
+
+
 ## [1.1.1]
 
 - Use `css.map` as allowed filetype to cater for SS 4.1.1 change
