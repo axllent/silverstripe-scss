@@ -8,3 +8,7 @@ SilverStripe\Core\Injector\Injector:
 SilverStripe\Admin\LeftAndMain:
   extensions:
     - Axllent\Scss\Extensions\HTMLEditor
+
+SilverStripe\ErrorPage\ErrorPageController:
+  extensions:
+    - Axllent\Scss\Extensions\ErrorPageControllerExtension
