@@ -2,6 +2,12 @@
 
 Notable changes to this project will be documented in this file.
 
+
+## [1.3.0]
+
+- Switch to scssphp/scssphp ([see why](https://github.com/leafo/scssphp/issues/649))
+
+
 ## [1.2.0]
 
 - Do not combine requirements on ErrorPages
