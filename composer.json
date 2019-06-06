@@ -16,7 +16,7 @@
 	},
     "require": {
 		"silverstripe/framework": "^4.0",
-        "leafo/scssphp": "^0.7.4"
+        "scssphp/scssphp": "^1.0"
 	},
     "conflict": {
         "axllent/silverstripe-less": "*"

@@ -1,45 +1,59 @@
 <?php
-
 namespace Axllent\Scss;
 
 use Axllent\Scss\Extensions\SourceMapGenerator;
-use Leafo\ScssPhp\Compiler;
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use ScssPhp\ScssPhp\Compiler;
 use SilverStripe\Assets\FileNameFilter;
+use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Flushable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\View\Requirements_Backend;
-use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 
 /**
  * Scssphp CSS compiler for SilverStripe
  * ======================================
  *
- * Extension to add leafo/scssphp CSS compiler to SilverStripe
+ * Extension to add scssphp/scssphp CSS compiler to SilverStripe
  *
  * Usage: See README.md
  *
  * License: MIT-style license http://opensource.org/licenses/MIT
  * Authors: Techno Joy development team (www.technojoy.co.nz)
  */
-
 class ScssCompiler extends Requirements_Backend
 {
     /**
+     * Custom variables
+     *
      * @config
      */
     private static $variables = [];
 
+    /**
+     * Relative theme directory
+     *
+     * @var mixed
+     */
     private static $theme_dir = false;
 
+    /**
+     * Sourcemap type
+     *
+     * @var string file|inline|false
+     */
     private static $sourcemap = 'file';
 
-    private static $processed_files = [];
+    /**
+     * Array of aprocessed files
+     *
+     * @var array
+     */
+    private static $_processed_files = [];
 
+    /**
+     * Class constructor
+     */
     public function __construct()
     {
         $this->config = Config::inst();
@@ -65,20 +79,30 @@ class ScssCompiler extends Requirements_Backend
      * Register the given stylesheet into the list of requirements.
      * Processes *.scss files if detected and rewrites URLs
      *
-     * @param string $file The CSS file to load, relative to site root
-     * @param string $media Comma-separated list of media types to use in the link tag (e.g. 'screen,projector')
+     * @param string $file  The CSS file to load, relative to site root
+     * @param string $media Media types (e.g. 'screen,projector')
+     *
+     * @return void
      */
     public function css($file, $media = null)
     {
         $css_file = $this->processScssFile($file);
+
         return parent::css($css_file, $media);
     }
 
     /**
      * Process any scss files and return new filenames
+     *
+     * @param string $combinedFileName Filename of combined file relative to docroot
+     * @param array  $files            Array of filenames relative to docroot
+     * @param array  $options          Array of options for combining files.
+     *
+     * @return void
+     *
      * @See Requirements_Backend->combineFiles() for options
      */
-    public function combineFiles($combinedFileName, $files, $options = array())
+    public function combineFiles($combinedFileName, $files, $options = [])
     {
         $new_files = [];
 
@@ -91,26 +115,30 @@ class ScssCompiler extends Requirements_Backend
 
     /**
      * Process scss file (if detected) and return new URL
-     * @param String (original)
-     * @return String (new filename)
+     *
+     * @param String $file CSS filename
+     *
+     * @return String CSS filename
      */
     public function processScssFile($file)
     {
         if (!preg_match('/\.scss$/', $file)) { // Not a scss file
             return $file;
-        } elseif (!empty(self::$processed_files[$file])) { // already processed
-            return self::$processed_files[$file];
+        } elseif (!empty(self::$_processed_files[$file])) { // already processed
+            return self::$_processed_files[$file];
         }
 
         $scss_file = $file;
 
         // return if not a file
         if (!is_file(Director::getAbsFile($scss_file))) {
-            self::$processed_files[$file] = $file;
+            self::$_processed_files[$file] = $file;
+
             return $file;
         }
 
-        // Generate a new CSS filename that includes the original path to avoid naming conflicts.
+        // Generate a new CSS filename that includes the original path
+        // to avoid naming conflicts.
         // eg: themes/site/css/file.scss becomes themes-site-css-file.css
         $url_friendly_css_name = $this->file_name_filter->filter(
             str_replace('/', '-', preg_replace('/\.scss$/i', '', $scss_file))
@@ -120,13 +148,10 @@ class ScssCompiler extends Requirements_Backend
 
         $output_file = $this->asset_handler->getContentURL($css_file);
 
-        if (
-            is_null($output_file) ||
-            $this->is_dev &&
-            (
-                filemtime(Director::makeRelative($output_file)) < filemtime(Director::getAbsFile($scss_file)) ||
-                isset($_GET['flushstyles'])
-            )
+        if (is_null($output_file)
+            || $this->is_dev
+            && (filemtime(Director::makeRelative($output_file)) < filemtime(Director::getAbsFile($scss_file))
+            || isset($_GET['flushstyles']))
         ) {
             $base_url = Director::baseURL();
 
@@ -135,9 +160,9 @@ class ScssCompiler extends Requirements_Backend
             $scss = new Compiler();
 
             if ($this->is_dev) {
-                $scss->setFormatter('Leafo\ScssPhp\Formatter\Expanded');
+                $scss->setFormatter('ScssPhp\ScssPhp\Formatter\Expanded');
             } else {
-                $scss->setFormatter('Leafo\ScssPhp\Formatter\Crunched');
+                $scss->setFormatter('ScssPhp\ScssPhp\Formatter\Crunched');
             }
 
             $scss->addImportPath(dirname(Director::getAbsFile($scss_file)) . '/');
@@ -154,7 +179,10 @@ class ScssCompiler extends Requirements_Backend
             $scss->setVariables($variables);
 
             $sourcemap = $this->config->get(__CLASS__, 'sourcemap');
-            if ($sourcemap && $this->is_dev && in_array(strtolower($sourcemap), ['inline', 'file'])) {
+            if ($sourcemap
+                && $this->is_dev
+                && in_array(strtolower($sourcemap), ['inline', 'file'])
+            ) {
                 $map_options = [
                     'sourceMapRootpath' => $scss_base,
                     'sourceMapBasepath' => dirname(Director::getAbsFile($scss_file)),
@@ -182,8 +210,8 @@ class ScssCompiler extends Requirements_Backend
 
         $parsed_file = Director::makeRelative($output_file);
 
-        self::$processed_files[$file] = $parsed_file;
-        self::$processed_files[$parsed_file] = $parsed_file;
+        self::$_processed_files[$file]        = $parsed_file;
+        self::$_processed_files[$parsed_file] = $parsed_file;
 
         return $parsed_file;
     }

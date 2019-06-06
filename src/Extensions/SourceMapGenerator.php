@@ -6,19 +6,26 @@ use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\View\Requirements;
-use Leafo\ScssPhp\SourceMap\SourceMapGenerator as Leafo_SourceMapGenerator;
+use ScssPhp\ScssPhp\SourceMap\SourceMapGenerator as ScssPhp_SourceMapGenerator;
 
-class SourceMapGenerator extends Leafo_SourceMapGenerator
+class SourceMapGenerator extends ScssPhp_SourceMapGenerator
 {
     /**
+     * Options
+     *
      * @var array
      */
     private $options;
 
+    /**
+     * Class Contructor
+     *
+     * @param array $options Options
+     */
     public function __construct(array $options = [])
     {
-    	parent::__construct($options);
-    	// can't access options from the child class, so we'll do it the hard way
+        parent::__construct($options);
+        // can't access options from the child class, so we'll do it the hard way
         $this->options = array_merge($this->defaultOptions, $options);
     }
 
