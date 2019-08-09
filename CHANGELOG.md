@@ -2,6 +2,10 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.3.1]
+
+- Add `BaseFolder` scss variable (`Director::baseFolder()`)
+
 
 ## [1.3.0]
 
