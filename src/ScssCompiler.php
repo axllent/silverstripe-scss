@@ -150,10 +150,11 @@ class ScssCompiler extends Requirements_Backend
 
         if (is_null($output_file)
             || $this->is_dev
-            && (filemtime(Director::makeRelative($output_file)) < filemtime(Director::getAbsFile($scss_file))
-            || isset($_GET['flushstyles']))
+            && (filemtime(Director::makeRelative($output_file)) < filemtime(Director::getAbsFile($scss_file)) || isset($_GET['flushstyles']))
         ) {
             $base_url = Director::baseURL();
+
+            $base_folder = Director::baseFolder();
 
             $scss_base = dirname($base_url . $scss_file) . '/';
 
@@ -170,6 +171,8 @@ class ScssCompiler extends Requirements_Backend
             $variables = $this->config->get(__CLASS__, 'variables');
 
             $variables['BaseURL'] = '"' . $base_url . '"';
+
+            $variables['BaseFolder'] = '"' . $base_folder . '"';
 
             $theme_dir = rtrim($this->config->get(__CLASS__, 'theme_dir'), '/') . '/';
             if ($theme_dir) {
