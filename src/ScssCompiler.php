@@ -19,7 +19,7 @@ use SilverStripe\View\Requirements_Backend;
  * Usage: See README.md
  *
  * License: MIT-style license http://opensource.org/licenses/MIT
- * Authors: Techno Joy development team (www.technojoy.co.nz)
+ * Authors: Techno Joy (https://www.technojoy.co.nz)
  */
 class ScssCompiler extends Requirements_Backend
 {
@@ -79,16 +79,17 @@ class ScssCompiler extends Requirements_Backend
      * Register the given stylesheet into the list of requirements.
      * Processes *.scss files if detected and rewrites URLs
      *
-     * @param string $file  The CSS file to load, relative to site root
-     * @param string $media Media types (e.g. 'screen,projector')
+     * @param string $file    The CSS file to load, relative to site root
+     * @param string $media   Media types (e.g. 'screen,projector')
+     * @param array  $options List of options.
      *
      * @return void
      */
-    public function css($file, $media = null)
+    public function css($file, $media = null, $options = [])
     {
         $css_file = $this->processScssFile($file);
 
-        return parent::css($css_file, $media);
+        return parent::css($css_file, $media, $options);
     }
 
     /**
