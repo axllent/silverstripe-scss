@@ -9,6 +9,8 @@ class ErrorPageControllerExtension extends Extension
     /**
      * Do not combine requirements on ErrorPages
      * Combined files chage names on rebuild and clash with static error pages
+     *
+     * @return void
      */
     public function onBeforeInit()
     {

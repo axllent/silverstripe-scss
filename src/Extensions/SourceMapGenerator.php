@@ -1,12 +1,8 @@
 <?php
 namespace Axllent\Scss\Extensions;
 
-use FilesystemIterator;
-use SilverStripe\Admin\LeftAndMainExtension;
-use SilverStripe\Control\Director;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\View\Requirements;
 use ScssPhp\ScssPhp\SourceMap\SourceMapGenerator as ScssPhp_SourceMapGenerator;
+use SilverStripe\View\Requirements;
 
 class SourceMapGenerator extends ScssPhp_SourceMapGenerator
 {
@@ -45,6 +41,7 @@ class SourceMapGenerator extends ScssPhp_SourceMapGenerator
         $url = $asset_handler->getContentURL($css_file);
 
         $this->options['sourceMapURL'] = $url;
+
         return $this->options['sourceMapURL'];
     }
 }
