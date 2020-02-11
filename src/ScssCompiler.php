@@ -8,6 +8,7 @@ use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\View\Requirements_Backend;
 
 /**
@@ -87,6 +88,7 @@ class ScssCompiler extends Requirements_Backend
      */
     public function css($file, $media = null, $options = [])
     {
+        $file = ModuleResourceLoader::singleton()->resolvePath($file);
         $css_file = $this->processScssFile($file);
 
         return parent::css($css_file, $media, $options);
@@ -108,6 +110,7 @@ class ScssCompiler extends Requirements_Backend
         $new_files = [];
 
         foreach ($files as $file) {
+            $file = ModuleResourceLoader::singleton()->resolvePath($file);
             $new_files[] = $this->processScssFile($file);
         }
 
