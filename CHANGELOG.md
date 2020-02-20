@@ -4,7 +4,7 @@ Notable changes to this project will be documented in this file.
 
 ## [1.5.0]
 
-- Switch to using separeate `$processed_folder` (default `_css`) due to upstream changes in `/dev/build` always emptying `_combinedfiles` causing issues with errorpage regeneration
+- Switch to using separate `$processed_folder` (default `_css`) due to upstream changes in `/dev/build` always emptying `_combinedfiles` causing issues with errorpage regeneration
 - Remove (now) redundant ErrorPageController extension
 
 
