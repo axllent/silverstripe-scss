@@ -1,6 +1,7 @@
 <?php
 namespace Axllent\Scss\Extensions;
 
+use Axllent\Scss\ScssCompiler;
 use FilesystemIterator;
 use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\Control\Director;
@@ -21,11 +22,11 @@ class HTMLEditor extends LeftAndMainExtension
     {
         $asset_handler = Requirements::backend()->getAssetHandler();
 
-        $combined_folder = Requirements::backend()->getCombinedFilesFolder();
+        $combined_folder = ScssCompiler::getProcessedCSSFolder();
 
         $folder = $asset_handler->getContentURL($combined_folder);
 
-        if (!$folder) { // _combinedfiles doesn't exist
+        if (!$folder) {
             return;
         }
 

@@ -46,6 +46,13 @@ class ScssCompiler extends Requirements_Backend
     private static $sourcemap = 'file';
 
     /**
+     * Folder name for processed css under `assets`
+     *
+     * @var string
+     */
+    private static $processed_folder = '_css';
+
+    /**
      * Array of aprocessed files
      *
      * @var array
@@ -88,7 +95,7 @@ class ScssCompiler extends Requirements_Backend
      */
     public function css($file, $media = null, $options = [])
     {
-        $file = ModuleResourceLoader::singleton()->resolvePath($file);
+        $file     = ModuleResourceLoader::singleton()->resolvePath($file);
         $css_file = $this->processScssFile($file);
 
         return parent::css($css_file, $media, $options);
@@ -110,7 +117,7 @@ class ScssCompiler extends Requirements_Backend
         $new_files = [];
 
         foreach ($files as $file) {
-            $file = ModuleResourceLoader::singleton()->resolvePath($file);
+            $file        = ModuleResourceLoader::singleton()->resolvePath($file);
             $new_files[] = $this->processScssFile($file);
         }
 
@@ -148,13 +155,17 @@ class ScssCompiler extends Requirements_Backend
             str_replace('/', '-', preg_replace('/\.scss$/i', '', $scss_file))
         ) . '.css';
 
-        $css_file = $this->getCombinedFilesFolder() . '/' . $url_friendly_css_name;
+        $css_file = self::getProcessedCSSFolder() . '/' . $url_friendly_css_name;
 
         $output_file = $this->asset_handler->getContentURL($css_file);
 
         if (is_null($output_file)
             || $this->is_dev
-            && (filemtime(Director::makeRelative($output_file)) < filemtime(Director::getAbsFile($scss_file)) || isset($_GET['flushstyles']))
+            && (filemtime(
+                Director::makeRelative($output_file)
+            ) < filemtime(
+                Director::getAbsFile($scss_file)
+            ) || isset($_GET['flushstyles']))
         ) {
             $base_url = Director::baseURL();
 
@@ -221,5 +232,18 @@ class ScssCompiler extends Requirements_Backend
         self::$_processed_files[$parsed_file] = $parsed_file;
 
         return $parsed_file;
+    }
+
+    /**
+     * Return the processed CSS folder name
+     *
+     * @return string
+     */
+    public static function getProcessedCSSFolder()
+    {
+        return Config::inst()->get(
+            __CLASS__,
+            'processed_folder'
+        );
     }
 }
