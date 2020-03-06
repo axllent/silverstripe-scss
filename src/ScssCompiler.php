@@ -10,6 +10,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Flushable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\Core\Path;
 use SilverStripe\View\Requirements_Backend;
 
 /**
@@ -66,6 +67,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      * @var mixed
      */
     private static $_already_flushed = false;
+
     /**
      * Class constructor
      */
@@ -155,8 +157,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
             return $file;
         }
 
-        // Generate a new CSS filename that includes the original path
-        // to avoid naming conflicts.
+        // Generate CSS filename including original path to avoid conflicts.
         // eg: themes/site/css/file.scss becomes themes-site-css-file.css
         $url_friendly_css_name = $this->file_name_filter->filter(
             str_replace('/', '-', preg_replace('/\.scss$/i', '', $scss_file))
@@ -166,13 +167,13 @@ class ScssCompiler extends Requirements_Backend implements Flushable
 
         $output_file = $this->asset_handler->getContentURL($css_file);
 
+        // absolute path to asset
+        $real_src  = Director::getAbsFile($scss_file);
+        $real_path = Path::join(PUBLIC_PATH, Director::makeRelative($output_file));
+
         if (is_null($output_file)
             || $this->is_dev
-            && (filemtime(
-                Director::makeRelative($output_file)
-            ) < filemtime(
-                Director::getAbsFile($scss_file)
-            ) || isset($_GET['flushstyles']))
+            && (filemtime($real_path) < filemtime($real_src) || isset($_GET['flushstyles']))
         ) {
             $base_url = Director::baseURL();
 
