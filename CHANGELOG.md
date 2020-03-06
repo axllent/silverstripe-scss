@@ -2,6 +2,12 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.5.1]
+
+- Add flush interface
+- Fix filemtime() path bug
+
+
 ## [1.5.0]
 
 - Switch to using separate `$processed_folder` (default `_css`) due to upstream changes in `/dev/build` always emptying `_combinedfiles` causing issues with errorpage regeneration
