@@ -7,6 +7,7 @@ use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Flushable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\View\Requirements_Backend;
@@ -22,7 +23,7 @@ use SilverStripe\View\Requirements_Backend;
  * License: MIT-style license http://opensource.org/licenses/MIT
  * Authors: Techno Joy (https://www.technojoy.co.nz)
  */
-class ScssCompiler extends Requirements_Backend
+class ScssCompiler extends Requirements_Backend implements Flushable
 {
     /**
      * Custom variables
@@ -59,6 +60,12 @@ class ScssCompiler extends Requirements_Backend
      */
     private static $_processed_files = [];
 
+    /**
+     * Has a flush happened
+     *
+     * @var mixed
+     */
+    private static $_already_flushed = false;
     /**
      * Class constructor
      */
@@ -232,6 +239,25 @@ class ScssCompiler extends Requirements_Backend
         self::$_processed_files[$parsed_file] = $parsed_file;
 
         return $parsed_file;
+    }
+
+    /**
+     * Triggered early in the request when a flush is requested
+     * Deletes the scss build folder
+     *
+     * @return void
+     */
+    public static function flush()
+    {
+        $css_dir = self::getProcessedCSSFolder();
+
+        if (!self::$_already_flushed && $css_dir != '') {
+            // remove /public/assets/_css
+            $ah = Injector::inst()->get(GeneratedAssetHandler::class);
+            $ah->removeContent($css_dir);
+            // make sure we only flush once per request and not for each *.less
+            self::$_already_flushed = true;
+        }
     }
 
     /**
