@@ -4,7 +4,7 @@
 
 Silverstripe-scss allows setting variables for compiling your scss files.
 One of the most common issues is the full path of your relative images as the compiled scc files
-are rewritten to `assets/_css_/`.
+are rewritten to `assets/_css/`.
 
 Silverstripe-scss comes with a built-in scss variable `$ThemeDir` provided you have specified a
 `theme_dir` in your config (eg: `app/_config/scss.yml`):
