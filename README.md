@@ -1,23 +1,23 @@
 # ScssPHP compiler for SilverStripe
 
-A wrapper for [scssphp](http://leafo.github.io/scssphp/) to integrate [scss](http://sass-lang.com/) compiling directly into SilverStripe.
+A wrapper for [scssphp](https://scssphp.github.io/scssphp/) to integrate [scss](http://sass-lang.com/) compiling directly into SilverStripe.
 
 Scss files are only compiled when needed, or when a `?flush` is done.
 
 ## Features
 
-- Integrates [scssphp](http://leafo.github.io/scssphp/) seemessly into SilverStripe
+- Integrates [scssphp](https://scssphp.github.io/scssphp/) seemessly into SilverStripe
 - Includes flushing option (`?flushstyles`) to regenerate CSS stylesheets (ie. force undetected scss changes with @import). Note: this only applies to sites in `dev` mode. Alternatively use `?flush` to flush everything including stylesheets.
-- Writes processed `*.scss` files into `assets/_combinedfiles` and automatically modifies `Requirements` paths
+- Writes processed `*.scss` files into `assets/_css_` and automatically modifies `Requirements` paths
 - Allows custom global variables to be passed through to scss compiling (yaml configuration)
 - Basic support for `$ThemeDir` (eg: `url('#{$ThemeDir}/images/logo.png')` (see [Configuration](docs/en/Configuration.md))
-- Automatic compression of CSS files when in `Live` mode (may require an initial `?flush`)
+- Automatic compression of CSS files when in `live` mode (may require an initial `?flush`)
 - Adds any processed `editor.scss` files to TinyMCE (must be included in your front-end template)
-- Optional source maps (either inline or exported to a file)
+- Source maps (either inline or file) in `dev` mode only, can be disabled
 
 ## Requirements
 
-- SilverStripe 4
+- SilverStripe ^4
 
 ## Installation
 
@@ -46,11 +46,11 @@ class PageController extends ContentController
 }
 ```
 
-The generated HTML will point automatically to the **processed** CSS file in `assets/_combinedfiles`
+The generated HTML will point automatically to the **processed** CSS file in `assets/_css`
 rather than the original scss file location, for example
 
 ```
-<link rel="stylesheet" type="text/css"  href="/assets/_combinedfiles/themes-site-css-stylesheet.css?m=123456789" />
+<link rel="stylesheet" type="text/css"  href="/assets/_css/themes-site-css-stylesheet.css?m=123456789" />
 ```
 
 ## Further documentation

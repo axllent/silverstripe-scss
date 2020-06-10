@@ -1,6 +1,7 @@
 <?php
 namespace Axllent\Scss\Extensions;
 
+use Axllent\Scss\ScssCompiler;
 use FilesystemIterator;
 use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\Control\Director;
@@ -12,19 +13,26 @@ use SilverStripe\View\Requirements;
  */
 class HTMLEditor extends LeftAndMainExtension
 {
+    /**
+     * OnBeforeInit
+     *
+     * @return void
+     */
     public function onBeforeInit()
     {
         $asset_handler = Requirements::backend()->getAssetHandler();
 
-        $combined_folder = Requirements::backend()->getCombinedFilesFolder();
+        $combined_folder = ScssCompiler::getProcessedCSSFolder();
 
         $folder = $asset_handler->getContentURL($combined_folder);
 
-        if (!$folder) { // _combinedfiles doesn't exist
+        if (!$folder) {
             return;
         }
 
-        $files = new FilesystemIterator(Director::getAbsFile(Director::makeRelative($folder)));
+        $files = new FilesystemIterator(
+            Director::getAbsFile(Director::makeRelative($folder))
+        );
 
         $editor_css = [];
 
@@ -39,6 +47,10 @@ class HTMLEditor extends LeftAndMainExtension
             return; // no *-editor.css found
         }
 
-        Config::modify()->merge('SilverStripe\\Forms\\HTMLEditor\\TinyMCEConfig', 'editor_css', $editor_css);
+        Config::modify()->merge(
+            'SilverStripe\\Forms\\HTMLEditor\\TinyMCEConfig',
+            'editor_css',
+            $editor_css
+        );
     }
 }

@@ -1,6 +1,6 @@
 # Installation
 
-To install it in your project:
+To install it:
 
 ```
 composer require axllent/silverstripe-scss

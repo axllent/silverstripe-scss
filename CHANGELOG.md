@@ -2,9 +2,52 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.5.1]
+
+- Add flush interface
+- Fix filemtime() path bug
+
+
+## [1.5.0]
+
+- Switch to using separate `$processed_folder` (default `_css`) due to upstream changes in `/dev/build` always emptying `_combinedfiles` causing issues with errorpage regeneration
+- Remove (now) redundant ErrorPageController extension
+
+
+## [1.4.1]
+
+- Add support for vendor URLs using `ModuleResourceLoader`
+
+
+## [1.4.0]
+
+- Add third `$options` arg to `css()` for SS 4.5.0 compatibility
+- Set requirement silverstripe/framework:^4.5
+
+
+## [1.3.1]
+
+- Add `BaseFolder` scss variable (`Director::baseFolder()`)
+
+
+## [1.3.0]
+
+- Switch to scssphp/scssphp ([see why](https://github.com/leafo/scssphp/issues/649))
+
+
+## [1.2.0]
+
+- Do not combine requirements on ErrorPages
+
+
+## [1.1.1]
+
+- Use `css.map` as allowed filetype to cater for SS 4.1.1 change
+
+
 ## [1.1.0]
 
-- Add optional source maps (inline or file)
+- Add source maps (inline or file), enabled by default
 - Remove redundant code
 
 

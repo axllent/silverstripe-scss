@@ -20,7 +20,7 @@ class PageController extends ContentController
 }
 ```
 
-This will parse the scss file (if needed), and write the resulting CSS file to `assets/_combinedfiles/themes-site-css-stylesheet.css`
+This will parse the scss file (if needed), and write the resulting CSS file to `assets/_css/themes-site-css-stylesheet.css`
 and automatically link the CSS in the templates to that file.
 
 This also works if you are combining files:
