@@ -6,9 +6,9 @@ Scss files are only compiled when needed, or when a `?flush` is done.
 
 ## Features
 
-- Integrates [scssphp](https://scssphp.github.io/scssphp/) seemessly into SilverStripe
+- Integrates [scssphp](https://scssphp.github.io/scssphp/) seamlessly into SilverStripe
 - Includes flushing option (`?flushstyles`) to regenerate CSS stylesheets (ie. force undetected scss changes with @import). Note: this only applies to sites in `dev` mode. Alternatively use `?flush` to flush everything including stylesheets.
-- Writes processed `*.scss` files into `assets/_css_` and automatically modifies `Requirements` paths
+- Writes processed `*.scss` files into `assets/_css/` and automatically modifies `Requirements` paths
 - Allows custom global variables to be passed through to scss compiling (yaml configuration)
 - Basic support for `$ThemeDir` (eg: `url('#{$ThemeDir}/images/logo.png')` (see [Configuration](docs/en/Configuration.md))
 - Automatic compression of CSS files when in `live` mode (may require an initial `?flush`)
@@ -46,7 +46,7 @@ class PageController extends ContentController
 }
 ```
 
-The generated HTML will point automatically to the **processed** CSS file in `assets/_css`
+The generated HTML will point automatically to the **processed** CSS file in `assets/_css/`
 rather than the original scss file location, for example
 
 ```
