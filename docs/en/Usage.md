@@ -20,6 +20,13 @@ class PageController extends ContentController
 }
 ```
 
+The library supports `themedCSS()` file resolving mechanism. The following 3 liines are equivalent:
+```php
+Requirements::css('themes/site/scss/main.scss');
+Requirements::themedCSS('scss/main.scss');
+Requirements::themedCSS('main');
+```
+
 This will parse the scss file (if needed), and write the resulting CSS file to `assets/_css/themes-site-css-stylesheet.css`
 and automatically link the CSS in the templates to that file.
 
@@ -44,9 +51,25 @@ class PageController extends ContentController
 }
 ```
 
+For the sake of filename resolving to use in `Requirements::combine_files`, you can use `Requirements::findThemedSCSS()`:
+```php
+<?php
+use SilverStripe\View\Requirements;
+use Axllent\Scss\ScssCompiler;
+
+// ...
+Requirements::combine_files('combined.css', [
+    ScssCompiler::findThemedSCSS('css/stylesheet'),
+    ScssCompiler::findThemedSCSS('css/colours'),
+]);
+Requirements::process_combined_files();
+```
+
 You can also include scss stylesheets from within your templates:
 ```
 <% require css(themes/site/css/stylesheet.scss) %>
+<!-- OR -->
+<% require themedCSS(css/stylesheet.scss) %>
 ```
 
 ## Using custom variables and `$ThemeDir`

@@ -2,6 +2,7 @@
 namespace Axllent\Scss;
 
 use Axllent\Scss\Extensions\SourceMapGenerator;
+use InvalidArgumentException;
 use ScssPhp\ScssPhp\Compiler;
 use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\Assets\Storage\GeneratedAssetHandler;
@@ -12,6 +13,8 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Core\Path;
 use SilverStripe\View\Requirements_Backend;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ThemeResourceLoader;
 
 /**
  * Scssphp CSS compiler for SilverStripe
@@ -111,6 +114,30 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     }
 
     /**
+     * Resolve themed SCSS path
+     *
+     * @param string $name Name of SCSS file without extension
+     * @param array $themes List of themes, Defaults to {@see SSViewer::get_themes()}
+     * @return string Path to resolved SCSS file (relative to base dir)
+     */
+    public static function findThemedSCSS($name, $themes = null)
+    {
+        if ($themes === null) {
+            $themes = SSViewer::get_themes();
+        }
+
+        if (substr($name, -4) !== '.scss') {
+            $name .= '.scss';
+        }
+        $filename = ThemeResourceLoader::inst()->findThemedResource("scss/$name", $themes);
+        if ($filename === null) {
+            $filename = ThemeResourceLoader::inst()->findThemedResource($name, $themes);
+        }
+
+        return $filename;
+    }
+
+    /**
      * Process any scss files and return new filenames
      *
      * @param string $combinedFileName Filename of combined file relative to docroot
@@ -131,6 +158,35 @@ class ScssCompiler extends Requirements_Backend implements Flushable
         }
 
         return parent::combineFiles($combinedFileName, $new_files, $options);
+    }
+
+    /**
+     * Registers the given themeable stylesheet as required.
+     *
+     * A CSS/SCSS file in the current theme path name 'themename/css/$name.css' is first searched for,
+     * and it that doesn't exist and the module parameter is set then a CSS file with that name in
+     * the module is used.
+     *
+     * @param string $name The name of the file - eg '/css/File.css' would have the name 'File'
+     * @param string $media Comma-separated list of media types to use in the link tag
+     *                       (e.g. 'screen,projector')
+     */
+    public function themedCSS($name, $media = null)
+    {
+        $path = ThemeResourceLoader::inst()->findThemedCSS($name, SSViewer::get_themes());
+        if ($path) {
+            $this->css($path, $media);
+        } else {
+            $path = self::findThemedSCSS($name, SSViewer::get_themes());
+            if ($path) {
+                $this->css($path, $media);
+            } else {
+                throw new InvalidArgumentException(
+                    "The css file doesn't exist. Please check if the file $name.css exists in any context or search for "
+                    . "themedCSS references calling this file in your templates."
+                );
+            }
+        }
     }
 
     /**
