@@ -126,7 +126,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
             $themes = SSViewer::get_themes();
         }
 
-        if (substr($name, -4) !== '.scss') {
+        if (substr($name, -5) !== '.scss') {
             $name .= '.scss';
         }
         $filename = ThemeResourceLoader::inst()->findThemedResource("scss/$name", $themes);
