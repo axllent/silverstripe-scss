@@ -173,16 +173,16 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      */
     public function themedCSS($name, $media = null)
     {
-        $path = ThemeResourceLoader::inst()->findThemedCSS($name, SSViewer::get_themes());
+        $path = self::findThemedSCSS($name, SSViewer::get_themes());
         if ($path) {
             $this->css($path, $media);
         } else {
-            $path = self::findThemedSCSS($name, SSViewer::get_themes());
+            $path = ThemeResourceLoader::inst()->findThemedCSS($name, SSViewer::get_themes());
             if ($path) {
                 $this->css($path, $media);
             } else {
                 throw new InvalidArgumentException(
-                    "The css file doesn't exist. Please check if the file $name.css exists in any context or search for "
+                    "The css/scss file doesn't exist. Please check if the file $name.css (or $name.scss) exists in any context or search for "
                     . "themedCSS references calling this file in your templates."
                 );
             }
