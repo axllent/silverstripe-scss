@@ -2,6 +2,12 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.6.0]
+
+- Feature: support for SCSS files in `Requirements::themedCSS()` (thanks to [@gurucomkz](https://github.com/gurucomkz))
+- Tidy up code & documentation
+
+
 ## [1.5.1]
 
 - Add flush interface
@@ -27,7 +33,7 @@ Notable changes to this project will be documented in this file.
 
 ## [1.3.1]
 
-- Add `BaseFolder` scss variable (`Director::baseFolder()`)
+- Add `BaseFolder` SCSS variable (`Director::baseFolder()`)
 
 
 ## [1.3.0]
