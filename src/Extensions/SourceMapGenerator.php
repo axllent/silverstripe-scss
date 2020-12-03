@@ -11,7 +11,7 @@ class SourceMapGenerator extends ScssPhp_SourceMapGenerator
      *
      * @var array
      */
-    private $options;
+    private $_options;
 
     /**
      * Class Contructor
@@ -22,7 +22,7 @@ class SourceMapGenerator extends ScssPhp_SourceMapGenerator
     {
         parent::__construct($options);
         // can't access options from the child class, so we'll do it the hard way
-        $this->options = array_merge($this->defaultOptions, $options);
+        $this->_options = array_merge($this->defaultOptions, $options);
     }
 
     /**
@@ -36,12 +36,12 @@ class SourceMapGenerator extends ScssPhp_SourceMapGenerator
     {
         $asset_handler = Requirements::backend()->getAssetHandler();
 
-        $css_file = $this->options['sourceMapWriteTo'];
+        $css_file = $this->_options['sourceMapWriteTo'];
         $asset_handler->setContent($css_file, $content);
         $url = $asset_handler->getContentURL($css_file);
 
-        $this->options['sourceMapURL'] = $url;
+        $this->_options['sourceMapURL'] = $url;
 
-        return $this->options['sourceMapURL'];
+        return $this->_options['sourceMapURL'];
     }
 }
