@@ -42,6 +42,8 @@ class PageController extends ContentController
     {
         parent::init();
         Requirements::css('themes/site/css/stylesheet.scss');
+        // OR
+        Requirements::themedCSS('css/stylesheet.scss');
     }
 }
 ```
