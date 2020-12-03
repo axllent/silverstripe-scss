@@ -1,10 +1,10 @@
 # Usage
 
-SilverStripe-scss is a plug-and-play module, meaning there is little you need to do.
+Silverstripe-scss is a plug-and-play module, meaning there is little you need to do.
 
 Once you have [installed][Installation.md] the module, simply use `Requirements` as you normally would, except using the *.scss names of your files.
 
-For instance if you have a `themes/site/css/stylesheet.scss` file you wish to add, in your PageController you would have
+For instance if you have a `themes/site/scss/stylesheet.scss` file you wish to add, in your PageController you would have
 ```php
 <?php
 use SilverStripe\CMS\Controllers\ContentController;
@@ -15,7 +15,15 @@ class PageController extends ContentController
     public function init()
     {
         parent::init();
-        Requirements::css('themes/site/css/stylesheet.scss');
+        Requirements::css('themes/site/scss/stylesheet.scss');
+        // OR
+        Requirements::themedCSS('scss/stylesheet.scss');
+        // OR
+        Requirements::themedCSS('scss/stylesheet');
+        // OR
+        Requirements::themedCSS('stylesheet.scss');
+        // OR
+        Requirements::themedCSS('stylesheet');
     }
 }
 ```
@@ -27,7 +35,7 @@ Requirements::themedCSS('scss/main.scss');
 Requirements::themedCSS('main');
 ```
 
-This will parse the scss file (if needed), and write the resulting CSS file to `assets/_css/themes-site-css-stylesheet.css`
+This will parse the SCSS file (if needed), and write the resulting CSS file to `assets/_css/themes-site-scss-stylesheet.css`
 and automatically link the CSS in the templates to that file.
 
 Note that the lookups for SCSS files (when no folder provided in path) are done in `scss` folder (not `css`).
@@ -44,10 +52,13 @@ class PageController extends ContentController
     public function init()
     {
         parent::init();
-        Requirements::combine_files('combined.css', [
-            'themes/site/css/stylesheet.scss',
-            'themes/site/css/colours.scss'
-        ]);
+        Requirements::combine_files(
+            'combined.css',
+            [
+                'themes/site/scss/stylesheet.scss',
+                'themes/site/scss/colours.scss'
+            ]
+        );
         Requirements::process_combined_files();
     }
 }
@@ -61,8 +72,8 @@ use Axllent\Scss\ScssCompiler;
 
 // ...
 Requirements::combine_files('combined.css', [
-    ScssCompiler::findThemedSCSS('css/stylesheet'),
-    ScssCompiler::findThemedSCSS('css/colours'),
+    ScssCompiler::findThemedSCSS('scss/stylesheet'),
+    ScssCompiler::findThemedSCSS('scss/colours'),
 ]);
 Requirements::process_combined_files();
 ```

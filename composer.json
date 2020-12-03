@@ -1,6 +1,6 @@
 {
     "name": "axllent/silverstripe-scss",
-    "description": "A wrapper for scssphp to integrate scss compiling directly into SilverStripe",
+    "description": "A wrapper for scssphp to integrate scss compiling directly into Silverstripe",
     "type": "silverstripe-vendormodule",
     "homepage": "https://github.com/axllent/silverstripe-scss",
     "keywords": [
