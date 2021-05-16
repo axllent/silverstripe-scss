@@ -2,6 +2,11 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.6.1]
+
+- Lock `scssphp/scssphp` to the 1.4 minor versions due to [compile issues](https://github.com/scssphp/scssphp/issues/397).
+
+
 ## [1.6.0]
 
 - Feature: support for SCSS files in `Requirements::themedCSS()` (thanks to [@gurucomkz](https://github.com/gurucomkz))
