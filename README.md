@@ -27,7 +27,7 @@ composer require axllent/silverstripe-scss
 
 ## Usage
 
-You need refer to your SCSS files by their full scss filenames (eg:`stylesheet.scss`).
+You need refer to your SCSS files by their full SCSS file names (eg:`stylesheet.scss`).
 
 ## Example
 

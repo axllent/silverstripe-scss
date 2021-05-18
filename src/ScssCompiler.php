@@ -16,10 +16,10 @@ use SilverStripe\View\SSViewer;
 use SilverStripe\View\ThemeResourceLoader;
 
 /**
- * Scssphp CSS compiler for SilverStripe
+ * Scssphp CSS compiler for silverstripe
  * ======================================
  *
- * Extension to add scssphp/scssphp CSS compiler to SilverStripe
+ * Extension to add scssphp/scssphp CSS compiler to silverstripe
  *
  * Usage: See README.md
  *
@@ -170,9 +170,10 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      * first searched for, and it that doesn't exist and the module parameter is
      * set then a CSS file with that name in the module is used.
      *
-     * @param string $name  The name of the file - eg '/css/File.css' would have the name 'File'
-     * @param string $media Comma-separated list of media types to use in the link tag
-     *                      (e.g. 'screen,projector')
+     * @param string $name  The name of the file - eg '/css/File.css' would
+     *                      have the name 'File'
+     * @param string $media Comma-separated list of media types to use in the
+     *                      link tag (e.g. 'screen,projector')
      *
      * @return void
      */
@@ -189,8 +190,8 @@ class ScssCompiler extends Requirements_Backend implements Flushable
                 $this->css($path, $media);
             } else {
                 throw new InvalidArgumentException(
-                    "The css/scss file doesn't exist. Please check if the file " .
-                    "$name.css (or $name.scss) exists in any context or search for "
+                    "The scss file doesn't exist. Please check if the file " .
+                    "$name.scss exists in any context or search for "
                     . 'themedCSS references calling this file in your templates.'
                 );
             }
@@ -334,7 +335,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
             // remove public/assets/_css folder
             $gah = Injector::inst()->get(GeneratedAssetHandler::class);
             $gah->removeContent($css_dir);
-            // make sure we only flush once per request and not for each *.scss
+            // make sure we only flush once per request, not for each *.scss
             self::$_already_flushed = true;
         }
     }
