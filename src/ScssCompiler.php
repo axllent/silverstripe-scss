@@ -1,7 +1,6 @@
 <?php
 namespace Axllent\Scss;
 
-use Axllent\Scss\Extensions\SourceMapGenerator;
 use InvalidArgumentException;
 use ScssPhp\ScssPhp\Compiler;
 use SilverStripe\Assets\FileNameFilter;
@@ -116,8 +115,9 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     /**
      * Resolve themed SCSS path
      *
-     * @param string $name Name of SCSS file without extension
-     * @param array $themes List of themes, Defaults to {@see SSViewer::get_themes()}
+     * @param string $name   Name of SCSS file without extension
+     * @param array  $themes List of themes, Defaults to SSViewer::get_themes()
+     *
      * @return string Path to resolved SCSS file (relative to base dir)
      */
     public static function findThemedSCSS($name, $themes = null)
@@ -129,9 +129,12 @@ class ScssCompiler extends Requirements_Backend implements Flushable
         if (substr($name, -5) !== '.scss') {
             $name .= '.scss';
         }
-        $filename = ThemeResourceLoader::inst()->findThemedResource("scss/$name", $themes);
+        $filename = ThemeResourceLoader::inst()
+            ->findThemedResource("scss/$name", $themes);
+
         if ($filename === null) {
-            $filename = ThemeResourceLoader::inst()->findThemedResource($name, $themes);
+            $filename = ThemeResourceLoader::inst()
+                ->findThemedResource($name, $themes);
         }
 
         return $filename;
@@ -163,13 +166,15 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     /**
      * Registers the given themeable stylesheet as required.
      *
-     * A CSS/SCSS file in the current theme path name 'themename/css/$name.css' is first searched for,
-     * and it that doesn't exist and the module parameter is set then a CSS file with that name in
-     * the module is used.
+     * A CSS/SCSS file in the current theme path name 'theme/css/$name.css' is
+     * first searched for, and it that doesn't exist and the module parameter is
+     * set then a CSS file with that name in the module is used.
      *
-     * @param string $name The name of the file - eg '/css/File.css' would have the name 'File'
+     * @param string $name  The name of the file - eg '/css/File.css' would have the name 'File'
      * @param string $media Comma-separated list of media types to use in the link tag
-     *                       (e.g. 'screen,projector')
+     *                      (e.g. 'screen,projector')
+     *
+     * @return void
      */
     public function themedCSS($name, $media = null)
     {
@@ -177,13 +182,16 @@ class ScssCompiler extends Requirements_Backend implements Flushable
         if ($path) {
             $this->css($path, $media);
         } else {
-            $path = ThemeResourceLoader::inst()->findThemedCSS($name, SSViewer::get_themes());
+            $path = ThemeResourceLoader::inst()
+                ->findThemedCSS($name, SSViewer::get_themes());
+
             if ($path) {
                 $this->css($path, $media);
             } else {
                 throw new InvalidArgumentException(
-                    "The css/scss file doesn't exist. Please check if the file $name.css (or $name.scss) exists in any context or search for "
-                    . "themedCSS references calling this file in your templates."
+                    "The css/scss file doesn't exist. Please check if the file " .
+                    "$name.css (or $name.scss) exists in any context or search for "
+                    . 'themedCSS references calling this file in your templates.'
                 );
             }
         }
@@ -192,9 +200,9 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     /**
      * Process scss file (if detected) and return new URL
      *
-     * @param String $file CSS filename
+     * @param string $file CSS filename
      *
-     * @return String CSS filename
+     * @return string CSS filename
      */
     public function processScssFile($file)
     {
@@ -227,8 +235,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
         $real_src  = Director::getAbsFile($scss_file);
         $real_path = Path::join(PUBLIC_PATH, Director::makeRelative($output_file));
 
-        if (is_null($output_file)
-            || $this->is_dev
+        if (is_null($output_file) || $this->is_dev
             && (filemtime($real_path) < filemtime($real_src) || isset($_GET['flushstyles']))
         ) {
             $base_url = Director::baseURL();
@@ -253,12 +260,18 @@ class ScssCompiler extends Requirements_Backend implements Flushable
 
             $variables['BaseFolder'] = '"' . $base_folder . '"';
 
-            $theme_dir = rtrim($this->config->get(__CLASS__, 'theme_dir'), '/') . '/';
+            $theme_dir = rtrim(
+                $this->config->get(__CLASS__, 'theme_dir'), '/'
+            ) . '/';
+
             if ($theme_dir) {
-                $variables['ThemeDir'] = '"' . $base_url . rtrim(ltrim($theme_dir, '/'), '/') . '"';
+                $variables['ThemeDir'] = '"' . $base_url
+                . rtrim(ltrim($theme_dir, '/'), '/') . '"';
             }
 
             $scss->setVariables($variables);
+
+            $map_options = [];
 
             $sourcemap = $this->config->get(__CLASS__, 'sourcemap');
             if ($sourcemap
@@ -275,18 +288,27 @@ class ScssCompiler extends Requirements_Backend implements Flushable
                     $scss->setSourceMapOptions($map_options);
                 } elseif (strtolower($sourcemap) == 'file') {
                     $map_options['sourceMapWriteTo'] = $css_file . '.map';
-                    $scss->setSourceMap(new SourceMapGenerator($map_options));
+                    $map_options['sourceMapURL']     = basename($css_file . '.map');
+                    $scss->setSourceMapOptions($map_options);
+                    $scss->setSourceMap(Compiler::SOURCE_MAP_FILE);
                 }
             }
 
             $scss_filename = basename($scss_file);
 
-            $raw_css = $scss->compile(
+            $result = $scss->compileString(
                 file_get_contents(Director::getAbsFile($scss_file)),
                 $scss_filename
             );
 
-            $this->asset_handler->setContent($css_file, $raw_css);
+            if (!empty($map_options['sourceMapWriteTo'])) {
+                $this->asset_handler->setContent(
+                    $map_options['sourceMapWriteTo'],
+                    $result->getSourceMap()
+                );
+            }
+
+            $this->asset_handler->setContent($css_file, $result->getCss());
             $output_file = $this->asset_handler->getContentURL($css_file);
         }
 
@@ -309,10 +331,10 @@ class ScssCompiler extends Requirements_Backend implements Flushable
         $css_dir = self::getProcessedCSSFolder();
 
         if (!self::$_already_flushed && $css_dir != '') {
-            // remove /public/assets/_css
-            $ah = Injector::inst()->get(GeneratedAssetHandler::class);
-            $ah->removeContent($css_dir);
-            // make sure we only flush once per request and not for each *.less
+            // remove public/assets/_css folder
+            $gah = Injector::inst()->get(GeneratedAssetHandler::class);
+            $gah->removeContent($css_dir);
+            // make sure we only flush once per request and not for each *.scss
             self::$_already_flushed = true;
         }
     }
