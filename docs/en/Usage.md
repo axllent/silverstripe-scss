@@ -78,7 +78,7 @@ Requirements::combine_files('combined.css', [
 Requirements::process_combined_files();
 ```
 
-You can also include scss stylesheets from within your templates:
+You can also include SCSS stylesheets from within your templates:
 ```
 <% require css(themes/site/scss/stylesheet.scss) %>
 <!-- OR -->
