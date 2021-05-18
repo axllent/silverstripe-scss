@@ -55,11 +55,11 @@ This means your site must have an `editor.scss` in your `Requirements` if you wa
 
 ## Source maps
 
-Source maps are very helpful when building, debugging or maintaining a website. They let you use browser development tools (such as Chrome's inspector) to see the exact file and line where your SCSS selectors are declared. By default sourcemap is enabled (file), and only in `dev` mode.
+Source maps are very helpful when building, debugging or maintaining a website. They let you use browser development tools (such as Chrome's inspector) to see the exact file and line where your SCSS selectors are declared. By default sourcemap is enabled (inline), and only in `dev` mode.
 
 Available settings are:
 * `file` (separate file in the same location as the compiled stylesheet)
-* `inline` (embedded in the compile stylesheet)
+* `inline` (embedded in the compiled stylesheet)
 * false (enabled by default)
 
 ```

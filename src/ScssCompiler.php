@@ -47,7 +47,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      *
      * @var string file|inline|false
      */
-    private static $sourcemap = 'file';
+    private static $sourcemap = 'inline';
 
     /**
      * Folder name for processed css under `assets`
