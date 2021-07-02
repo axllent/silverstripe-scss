@@ -2,7 +2,7 @@
 
 Notable changes to this project will be documented in this file.
 
-## [dev]
+## [1.7.0]
 
 - Support for `scssphp/scssphp` 1.6.*
 - Change default sourcemap to inline
