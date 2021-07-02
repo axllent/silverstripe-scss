@@ -22,7 +22,7 @@
     },
     "require": {
         "silverstripe/framework": "^4.5",
-        "scssphp/scssphp": "1.5.*"
+        "scssphp/scssphp": "1.6.*"
     },
     "conflict": {
         "axllent/silverstripe-less": "*"
