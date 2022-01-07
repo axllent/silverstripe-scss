@@ -2,6 +2,11 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.8.0]
+
+- Support for the latest `scssphp/scssphp` 1.* version
+
+
 ## [1.7.0]
 
 - Support for `scssphp/scssphp` 1.6.*
