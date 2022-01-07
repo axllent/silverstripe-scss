@@ -22,10 +22,11 @@
     },
     "require": {
         "silverstripe/framework": "^4.5",
-        "scssphp/scssphp": "1.6.*"
+        "scssphp/scssphp": "^1.10"
     },
     "conflict": {
-        "axllent/silverstripe-less": "*"
+        "axllent/silverstripe-less": "*",
+        "scssphp/scssphp": "1.5.0"
     },
     "autoload": {
         "psr-4": {
