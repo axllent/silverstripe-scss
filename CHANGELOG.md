@@ -2,6 +2,11 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.8.1]
+
+- Add Silverstripe 5 support
+
+
 ## [1.8.0]
 
 - Support for the latest `scssphp/scssphp` 1.* version
