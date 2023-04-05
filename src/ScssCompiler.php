@@ -1,7 +1,7 @@
 <?php
+
 namespace Axllent\Scss;
 
-use InvalidArgumentException;
 use ScssPhp\ScssPhp\Compiler;
 use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\Assets\Storage\GeneratedAssetHandler;
@@ -61,14 +61,22 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      *
      * @var array
      */
-    private static $_processed_files = [];
+    private static $processed_files = [];
 
     /**
      * Has a flush happened
      *
      * @var mixed
      */
-    private static $_already_flushed = false;
+    private static $already_flushed = false;
+
+    /**
+     * Other various cached values
+     */
+    private $config;
+    private $asset_handler;
+    private $file_name_filter;
+    private $is_dev;
 
     /**
      * Class constructor
@@ -100,7 +108,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      *
      * @param string $file    The CSS file to load, relative to site root
      * @param string $media   Media types (e.g. 'screen,projector')
-     * @param array  $options List of options.
+     * @param array  $options list of options
      *
      * @return void
      */
@@ -122,17 +130,17 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      */
     public static function findThemedSCSS($name, $themes = null)
     {
-        if ($themes === null) {
+        if (null === $themes) {
             $themes = SSViewer::get_themes();
         }
 
-        if (substr($name, -5) !== '.scss') {
+        if ('.scss' !== substr($name, -5)) {
             $name .= '.scss';
         }
         $filename = ThemeResourceLoader::inst()
-            ->findThemedResource("scss/$name", $themes);
+            ->findThemedResource("scss/{$name}", $themes);
 
-        if ($filename === null) {
+        if (null === $filename) {
             $filename = ThemeResourceLoader::inst()
                 ->findThemedResource($name, $themes);
         }
@@ -145,7 +153,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
      *
      * @param string $combinedFileName Filename of combined file relative to docroot
      * @param array  $files            Array of filenames relative to docroot
-     * @param array  $options          Array of options for combining files.
+     * @param array  $options          array of options for combining files
      *
      * @return void
      *
@@ -189,9 +197,9 @@ class ScssCompiler extends Requirements_Backend implements Flushable
             if ($path) {
                 $this->css($path, $media);
             } else {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     "The scss file doesn't exist. Please check if the file " .
-                    "$name.scss exists in any context or search for "
+                    "{$name}.scss exists in any context or search for "
                     . 'themedCSS references calling this file in your templates.'
                 );
             }
@@ -209,15 +217,16 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     {
         if (!preg_match('/\.scss$/', $file)) { // Not a scss file
             return $file;
-        } elseif (!empty(self::$_processed_files[$file])) { // already processed
-            return self::$_processed_files[$file];
+        }
+        if (!empty(self::$processed_files[$file])) { // already processed
+            return self::$processed_files[$file];
         }
 
         $scss_file = $file;
 
         // return if not a file
         if (!is_file(Director::getAbsFile($scss_file))) {
-            self::$_processed_files[$file] = $file;
+            self::$processed_files[$file] = $file;
 
             return $file;
         }
@@ -262,7 +271,8 @@ class ScssCompiler extends Requirements_Backend implements Flushable
             $variables['BaseFolder'] = '"' . $base_folder . '"';
 
             $theme_dir = rtrim(
-                $this->config->get(__CLASS__, 'theme_dir'), '/'
+                $this->config->get(__CLASS__, 'theme_dir'),
+                '/'
             ) . '/';
 
             if ($theme_dir) {
@@ -284,10 +294,10 @@ class ScssCompiler extends Requirements_Backend implements Flushable
                     'sourceMapBasepath' => dirname(Director::getAbsFile($scss_file)),
                 ];
 
-                if (strtolower($sourcemap) == 'inline') {
+                if ('inline' == strtolower($sourcemap)) {
                     $scss->setSourceMap(Compiler::SOURCE_MAP_INLINE);
                     $scss->setSourceMapOptions($map_options);
-                } elseif (strtolower($sourcemap) == 'file') {
+                } elseif ('file' == strtolower($sourcemap)) {
                     $map_options['sourceMapWriteTo'] = $css_file . '.map';
                     $map_options['sourceMapURL']     = basename($css_file . '.map');
                     $scss->setSourceMapOptions($map_options);
@@ -315,8 +325,8 @@ class ScssCompiler extends Requirements_Backend implements Flushable
 
         $parsed_file = Director::makeRelative($output_file);
 
-        self::$_processed_files[$file]        = $parsed_file;
-        self::$_processed_files[$parsed_file] = $parsed_file;
+        self::$processed_files[$file]        = $parsed_file;
+        self::$processed_files[$parsed_file] = $parsed_file;
 
         return $parsed_file;
     }
@@ -331,12 +341,12 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     {
         $css_dir = self::getProcessedCSSFolder();
 
-        if (!self::$_already_flushed && $css_dir != '') {
+        if (!self::$already_flushed && '' != $css_dir) {
             // remove public/assets/_css folder
             $gah = Injector::inst()->get(GeneratedAssetHandler::class);
             $gah->removeContent($css_dir);
             // make sure we only flush once per request, not for each *.scss
-            self::$_already_flushed = true;
+            self::$already_flushed = true;
         }
     }
 
