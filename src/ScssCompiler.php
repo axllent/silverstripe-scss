@@ -3,6 +3,7 @@
 namespace Axllent\Scss;
 
 use ScssPhp\ScssPhp\Compiler;
+use ScssPhp\ScssPhp\OutputStyle;
 use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 use SilverStripe\Control\Director;
@@ -257,9 +258,9 @@ class ScssCompiler extends Requirements_Backend implements Flushable
             $scss = new Compiler();
 
             if ($this->is_dev) {
-                $scss->setFormatter('ScssPhp\ScssPhp\Formatter\Expanded');
+                $scss->setOutputStyle(OutputStyle::EXPANDED);
             } else {
-                $scss->setFormatter('ScssPhp\ScssPhp\Formatter\Crunched');
+                $scss->setOutputStyle(OutputStyle::COMPRESSED);
             }
 
             $scss->addImportPath(dirname(Director::getAbsFile($scss_file)) . '/');
