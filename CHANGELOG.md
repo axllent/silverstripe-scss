@@ -2,6 +2,11 @@
 
 Notable changes to this project will be documented in this file.
 
+## [1.8.3]
+
+- Replace deprecated formatting configuration
+
+
 ## [1.8.2]
 
 - Remove dynamically created properties (deprecated PHP8.2)
