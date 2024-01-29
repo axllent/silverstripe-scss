@@ -21,12 +21,9 @@
         "issues": "https://github.com/axllent/silverstripe-scss/issues"
     },
     "require": {
-        "silverstripe/framework": "^4.5 || ^5.0",
-        "scssphp/scssphp": "^1.11"
-    },
-    "conflict": {
-        "axllent/silverstripe-less": "*",
-        "scssphp/scssphp": "1.5.0"
+        "axllent/silverstripe-minify": "^1.0",
+        "silverstripe/framework": "^5.0",
+        "scssphp/scssphp": "^1.12"
     },
     "autoload": {
         "psr-4": {
