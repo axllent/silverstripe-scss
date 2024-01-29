@@ -9,9 +9,9 @@ are rewritten to `assets/_css/`.
 Silverstripe-scss comes with a built-in SCSS variable `$ThemeDir` provided you have specified a
 `theme_dir` in your config (eg: `app/_config/scss.yml`):
 
-```
+```yaml
 Axllent\Scss\ScssCompiler:
-  theme_dir: 'themes/site'
+  theme_dir: '_resources/themes/site'
 ```
 
 In your `scss` file you would use it like:
@@ -30,8 +30,6 @@ You can set multiple variables in your YAML configuration file (eg: `app/_config
 
 ```yaml
 Axllent\Scss\ScssCompiler:
-  theme_dir: 'resources/themes/site'
-  sourcemap: 'file'
   variables:
     'HeaderFont': 'Arial, sans-serif, "Times New Roman"'
     'HeaderFontSize': '18px'
