@@ -1,9 +1,9 @@
 ---
 Name: sasscompiler
 ---
-SilverStripe\Core\Injector\Injector:
-  SilverStripe\View\Requirements_Backend:
-    class: Axllent\Scss\ScssCompiler
+Axllent\Minify\Minifier:
+  compilers:
+    scss: Axllent\Scss\ScssCompiler
 
 SilverStripe\Admin\LeftAndMain:
   extensions:

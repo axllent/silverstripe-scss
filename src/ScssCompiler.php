@@ -10,14 +10,10 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Flushable;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Core\Path;
-use SilverStripe\View\Requirements_Backend;
-use SilverStripe\View\SSViewer;
-use SilverStripe\View\ThemeResourceLoader;
 
 /**
- * Scssphp CSS compiler for silverstripe
+ * ScssPHP CSS compiler for Silverstripe
  * ======================================
  *
  * Extension to add scssphp/scssphp CSS compiler to silverstripe
@@ -27,7 +23,7 @@ use SilverStripe\View\ThemeResourceLoader;
  * License: MIT-style license http://opensource.org/licenses/MIT
  * Authors: Techno Joy (https://www.technojoy.co.nz)
  */
-class ScssCompiler extends Requirements_Backend implements Flushable
+class ScssCompiler implements Flushable
 {
     /**
      * Custom variables
@@ -58,7 +54,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     private static $processed_folder = '_css';
 
     /**
-     * Array of aprocessed files
+     * Array of processed files
      *
      * @var array
      */
@@ -104,117 +100,11 @@ class ScssCompiler extends Requirements_Backend implements Flushable
     }
 
     /**
-     * Register the given stylesheet into the list of requirements.
-     * Processes *.scss files if detected and rewrites URLs
+     * Process the scss file
      *
-     * @param string $file    The CSS file to load, relative to site root
-     * @param string $media   Media types (e.g. 'screen,projector')
-     * @param array  $options list of options
-     *
-     * @return void
+     * @param string $file
      */
-    public function css($file, $media = null, $options = [])
-    {
-        $file     = ModuleResourceLoader::singleton()->resolvePath($file);
-        $css_file = $this->processScssFile($file);
-
-        return parent::css($css_file, $media, $options);
-    }
-
-    /**
-     * Resolve themed SCSS path
-     *
-     * @param string $name   Name of SCSS file without extension
-     * @param array  $themes List of themes, Defaults to SSViewer::get_themes()
-     *
-     * @return string Path to resolved SCSS file (relative to base dir)
-     */
-    public static function findThemedSCSS($name, $themes = null)
-    {
-        if (null === $themes) {
-            $themes = SSViewer::get_themes();
-        }
-
-        if ('.scss' !== substr($name, -5)) {
-            $name .= '.scss';
-        }
-        $filename = ThemeResourceLoader::inst()
-            ->findThemedResource("scss/{$name}", $themes);
-
-        if (null === $filename) {
-            $filename = ThemeResourceLoader::inst()
-                ->findThemedResource($name, $themes);
-        }
-
-        return $filename;
-    }
-
-    /**
-     * Process any scss files and return new filenames
-     *
-     * @param string $combinedFileName Filename of combined file relative to docroot
-     * @param array  $files            Array of filenames relative to docroot
-     * @param array  $options          array of options for combining files
-     *
-     * @return void
-     *
-     * @See Requirements_Backend->combineFiles() for options
-     */
-    public function combineFiles($combinedFileName, $files, $options = [])
-    {
-        $new_files = [];
-
-        foreach ($files as $file) {
-            $file        = ModuleResourceLoader::singleton()->resolvePath($file);
-            $new_files[] = $this->processScssFile($file);
-        }
-
-        return parent::combineFiles($combinedFileName, $new_files, $options);
-    }
-
-    /**
-     * Registers the given themeable stylesheet as required.
-     *
-     * A CSS/SCSS file in the current theme path name 'theme/css/$name.css' is
-     * first searched for, and it that doesn't exist and the module parameter is
-     * set then a CSS file with that name in the module is used.
-     *
-     * @param string $name  The name of the file - eg '/css/File.css' would
-     *                      have the name 'File'
-     * @param string $media Comma-separated list of media types to use in the
-     *                      link tag (e.g. 'screen,projector')
-     *
-     * @return void
-     */
-    public function themedCSS($name, $media = null)
-    {
-        $path = self::findThemedSCSS($name, SSViewer::get_themes());
-        if ($path) {
-            $this->css($path, $media);
-        } else {
-            $path = ThemeResourceLoader::inst()
-                ->findThemedCSS($name, SSViewer::get_themes());
-
-            if ($path) {
-                $this->css($path, $media);
-            } else {
-                throw new \InvalidArgumentException(
-                    "The scss file doesn't exist. Please check if the file " .
-                    "{$name}.scss exists in any context or search for "
-                    . 'themedCSS references calling this file in your templates.'
-                );
-            }
-        }
-    }
-
-    /**
-     * Process scss file (if detected) and return new URL
-     *
-     * @param string $file CSS filename
-     *
-     * @return string CSS filename
-     */
-    public function processScssFile($file)
+    public function process($file): string
     {
         if (!preg_match('/\.scss$/', $file)) { // Not a scss file
             return $file;
@@ -281,7 +171,7 @@ class ScssCompiler extends Requirements_Backend implements Flushable
                 . rtrim(ltrim($theme_dir, '/'), '/') . '"';
             }
 
-            $scss->setVariables($variables);
+            $scss->addVariables($variables);
 
             $map_options = [];
 
@@ -353,10 +243,8 @@ class ScssCompiler extends Requirements_Backend implements Flushable
 
     /**
      * Return the processed CSS folder name
-     *
-     * @return string
      */
-    public static function getProcessedCSSFolder()
+    public static function getProcessedCSSFolder(): string
     {
         return Config::inst()->get(
             __CLASS__,

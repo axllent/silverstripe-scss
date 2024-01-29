@@ -28,7 +28,7 @@ Only one `theme_dir` is supported.
 
 You can set multiple variables in your YAML configuration file (eg: `app/_config/scss.yml`).
 
-```
+```yaml
 Axllent\Scss\ScssCompiler:
   theme_dir: 'resources/themes/site'
   sourcemap: 'file'
@@ -62,7 +62,7 @@ Available settings are:
 * `inline` (embedded in the compiled stylesheet)
 * false (enabled by default)
 
-```
+```yaml
 Axllent\Scss\ScssCompiler:
   sourcemap: 'file' # 'file' | 'inline' | false
 ```
