@@ -1,7 +1,7 @@
 ---
 Name: sasscompiler
 ---
-Axllent\Minify\Minifier:
+Axllent\Minifier\Minifier:
   compilers:
     scss: Axllent\Scss\ScssCompiler
 
