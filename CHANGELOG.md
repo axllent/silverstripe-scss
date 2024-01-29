@@ -2,6 +2,12 @@
 
 Notable changes to this project will be documented in this file.
 
+## [2.0.0]
+
+- Drop support for Silverstripe 4
+- Integration with axllent/silverstripe-minify
+
+
 ## [1.8.3]
 
 - Replace deprecated formatting configuration
