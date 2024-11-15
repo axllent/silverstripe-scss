@@ -1,17 +1,17 @@
 <?php
+
 namespace Axllent\Scss\Extensions;
 
 use Axllent\Scss\ScssCompiler;
-use FilesystemIterator;
-use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Extension;
 use SilverStripe\View\Requirements;
 
 /**
  * Add any rendered editor.scss to TinyMCE
  */
-class HTMLEditor extends LeftAndMainExtension
+class HTMLEditor extends Extension
 {
     /**
      * OnBeforeInit
@@ -30,7 +30,7 @@ class HTMLEditor extends LeftAndMainExtension
             return;
         }
 
-        $files = new FilesystemIterator(
+        $files = new \FilesystemIterator(
             Director::getAbsFile(Director::makeRelative($folder))
         );
 
@@ -48,7 +48,7 @@ class HTMLEditor extends LeftAndMainExtension
         }
 
         Config::modify()->merge(
-            'SilverStripe\\Forms\\HTMLEditor\\TinyMCEConfig',
+            'SilverStripe\Forms\HTMLEditor\TinyMCEConfig',
             'editor_css',
             $editor_css
         );
