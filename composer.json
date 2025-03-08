@@ -14,7 +14,7 @@
     "authors": [
         {
             "name": "Ralph Slooten",
-            "homepage": "http://www.axllent.org/"
+            "homepage": "https://www.axllent.org/"
         }
     ],
     "support": {
@@ -22,7 +22,7 @@
     },
     "require": {
         "axllent/silverstripe-minifier": "^2.0",
-        "silverstripe/framework": "^5.0",
+        "silverstripe/framework": "^5.0 || ^6.0",
         "scssphp/scssphp": "^1.12"
     },
     "autoload": {

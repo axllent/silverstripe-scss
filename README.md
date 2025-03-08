@@ -17,7 +17,7 @@ SCSS files are only compiled when needed, or when a `?flush` is done.
 
 ## Requirements
 
-- Silverstripe ^5
+- Silverstripe ^5 || ^6
 
 ## Installation
 
@@ -51,7 +51,7 @@ class PageController extends ContentController
 The generated HTML will point automatically to the **processed** CSS file in `assets/_css/`
 rather than the original SCSS file location, for example
 
-```
+```html
 <link rel="stylesheet" type="text/css"  href="/assets/_css/themes-site-css-stylesheet.css?m=123456789" />
 ```
 
