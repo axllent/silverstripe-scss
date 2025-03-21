@@ -2,6 +2,11 @@
 
 Notable changes to this project will be documented in this file.
 
+## [2.1.2]
+
+- Fix support for custom editor.css in TinyMCE configuration in Silverstripe 6
+
+
 ## [2.1.1]
 
 - Add htaccess template to allow CSS files loaded from the assets directory
