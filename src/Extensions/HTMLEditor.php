@@ -47,8 +47,16 @@ class HTMLEditor extends Extension
             return; // no *-editor.css found
         }
 
+        // Silverstripe 4 & 5
         Config::modify()->merge(
             'SilverStripe\Forms\HTMLEditor\TinyMCEConfig',
+            'editor_css',
+            $editor_css
+        );
+
+        // Silverstripe 6
+        Config::modify()->merge(
+            'SilverStripe\TinyMCE\TinyMCEConfig',
             'editor_css',
             $editor_css
         );
