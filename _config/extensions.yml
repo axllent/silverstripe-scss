@@ -8,3 +8,9 @@ Axllent\Minifier\Minifier:
 SilverStripe\Admin\LeftAndMain:
   extensions:
     - Axllent\Scss\Extensions\HTMLEditor
+
+# Less restrictive restraints on assets to allow CSS files within /assets/_<folder>/file.css
+SilverStripe\Assets\Flysystem\PublicAssetAdapter:
+  server_configuration:
+    apache:
+      .htaccess: PublicAssetAdapter_HTAccess
