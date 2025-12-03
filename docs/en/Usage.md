@@ -2,9 +2,10 @@
 
 Silverstripe-scss is a plug-and-play module, meaning there is little you need to do.
 
-Once you have [installed][Installation.md] the module, simply use `Requirements` as you normally would, except using the *.scss names of your files.
+Once you have [installed][Installation.md] the module, simply use `Requirements` as you normally would, except using the \*.scss names of your files.
 
 For instance if you have a `themes/site/css/stylesheet.scss` file you wish to add, in your PageController you would have
+
 ```php
 <?php
 use SilverStripe\CMS\Controllers\ContentController;
@@ -19,20 +20,17 @@ class PageController extends ContentController
         // OR
         Requirements::themedCSS('css/stylesheet.scss');
         // OR
-        Requirements::themedCSS('css/stylesheet');
-        // OR
         Requirements::themedCSS('stylesheet.scss');
-        // OR
-        Requirements::themedCSS('stylesheet');
     }
 }
 ```
 
 The library supports `themedCSS()` file resolving mechanism. The following 3 lines are equivalent:
+
 ```php
 Requirements::css('themes/site/css/stylesheet.scss');
 Requirements::themedCSS('css/stylesheet.scss');
-Requirements::themedCSS('stylesheet');
+Requirements::themedCSS('stylesheet.scss');
 ```
 
 This will parse the SCSS file (if needed), and write the resulting CSS file to `assets/_css/themes-site-css-stylesheet.css`
@@ -57,11 +55,9 @@ class PageController extends ContentController
                 'themes/site/css/colours.scss'
             ]
         );
-        Requirements::process_combined_files();
     }
 }
 ```
-
 
 You can also include SCSS stylesheets from within your templates:
 
@@ -71,8 +67,6 @@ You can also include SCSS stylesheets from within your templates:
 <% require themedCSS(css/stylesheet.scss) %>
 <!-- OR -->
 <% require themedCSS(stylesheet.scss) %>
-<!-- OR -->
-<% require themedCSS(stylesheet) %>
 ```
 
 ## Using custom variables and `$ThemeDir`
