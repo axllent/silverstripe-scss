@@ -183,6 +183,9 @@ class ScssCompiler implements Flushable
                 $map_options = [
                     'sourceMapRootpath' => $scss_base,
                     'sourceMapBasepath' => dirname(Director::getAbsFile($scss_file)),
+                    // Embed the SCSS sources in the source map, as the source files
+                    // (themes/, vendor/) are generally not web-accessible
+                    'outputSourceFiles' => true,
                 ];
 
                 if ('inline' == strtolower($sourcemap)) {
@@ -196,10 +199,12 @@ class ScssCompiler implements Flushable
                 }
             }
 
-            $scss_filename = basename($scss_file);
+            // Absolute path is required for scssphp to read the entry file
+            // when embedding the sources in the source map
+            $scss_filename = Director::getAbsFile($scss_file);
 
             $result = $scss->compileString(
-                file_get_contents(Director::getAbsFile($scss_file)),
+                file_get_contents($scss_filename),
                 $scss_filename
             );
 
